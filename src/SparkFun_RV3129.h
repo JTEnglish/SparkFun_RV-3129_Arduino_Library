@@ -29,7 +29,7 @@ Distributed as-is; no warranty is given.
 #include <Wire.h>
 
 //The 7-bit I2C address of the RV3129
-#define RV3129_ADDR						(uint8_t)0x69
+#define RV3129_ADDR						(uint8_t)0xAC
 
 //The upper part of the part number is always 0x18
 #define RV3129_PART_NUMBER_UPPER		0x18
@@ -102,7 +102,8 @@ Distributed as-is; no warranty is given.
 #define ONE_EIGHT						0xD0
 #define ONE_FOUR						0xF0
 
-//Register names:
+/*
+//Register names: (OLD: RV-1805)
 #define RV3129_HUNDREDTHS               0x00
 #define RV3129_SECONDS      			0x01
 #define RV3129_MINUTES      			0x02
@@ -118,6 +119,7 @@ Distributed as-is; no warranty is given.
 #define RV3129_DATE_ALM        			0x0C
 #define RV3129_MONTHS_ALM      			0x0D
 #define RV3129_WEEKDAYS_ALM    			0x0E
+
 #define RV3129_STATUS					0x0F
 #define RV3129_CTRL1					0x10
 #define RV3129_CTRL2					0x11
@@ -142,6 +144,33 @@ Distributed as-is; no warranty is given.
 #define RV3129_ANLG_STAT				0x2F
 #define RV3129_OUT_CTRL					0x30
 #define RV3129_RAM_EXT					0x3F
+*/
+
+
+/**************************
+* Register Names
+***************************/
+// Control Page
+
+// Clock Page
+// #define RV3129_HUNDREDTHS               0x00 (No Hundredths Register)
+#define RV3129_SECONDS      			0x08
+#define RV3129_MINUTES      			0x09
+#define RV3129_HOURS        			0x0A
+#define RV3129_DATE         			0x0B // Days?
+#define RV3129_WEEKDAYS      			0x0C
+#define RV3129_MONTHS        			0x0D
+#define RV3129_YEARS        			0x0E
+
+// Alarm Page
+// #define RV3129_HUNDREDTHS_ALM           0x08 (No Hundredths Register)
+#define RV3129_SECONDS_ALM    			0x10
+#define RV3129_MINUTES_ALM     			0x11
+#define RV3129_HOURS_ALM       			0x12
+#define RV3129_DATE_ALM        			0x13
+#define RV3129_WEEKDAYS_ALM    			0x14
+#define RV3129_MONTHS_ALM      			0x15
+#define RV3129_YEARS_ALM    			0x16 // (This was not in RV-1805)
 
 #define TIME_ARRAY_LENGTH 8 // Total number of writable values in device
 
