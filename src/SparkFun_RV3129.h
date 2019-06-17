@@ -28,16 +28,16 @@ Distributed as-is; no warranty is given.
 
 #include <Wire.h>
 
-//The 7-bit I2C address of the RV1805
-#define RV1805_ADDR						(uint8_t)0x69
+//The 7-bit I2C address of the RV3129
+#define RV3129_ADDR						(uint8_t)0x69
 
 //The upper part of the part number is always 0x18
-#define RV1805_PART_NUMBER_UPPER		0x18
+#define RV3129_PART_NUMBER_UPPER		0x18
 
 //Possible CONFKEY Values
-#define RV1805_CONF_RST					0x3C //value written to Configuration Key for reset
-#define RV1805_CONF_OSC					0xA1 //value written to Configuration Key for oscillator control register write enable
-#define RV1805_CONF_WRT					0x9D //value written to Configuration Key to enable write of trickle charge, BREF, CAPRC, IO Batmode, and Output Control Registers
+#define RV3129_CONF_RST					0x3C //value written to Configuration Key for reset
+#define RV3129_CONF_OSC					0xA1 //value written to Configuration Key for oscillator control register write enable
+#define RV3129_CONF_WRT					0x9D //value written to Configuration Key to enable write of trickle charge, BREF, CAPRC, IO Batmode, and Output Control Registers
 
 //Bits in Control1 Register
 #define CTRL1_STOP	7
@@ -103,45 +103,45 @@ Distributed as-is; no warranty is given.
 #define ONE_FOUR						0xF0
 
 //Register names:
-#define RV1805_HUNDREDTHS               0x00
-#define RV1805_SECONDS      			0x01
-#define RV1805_MINUTES      			0x02
-#define RV1805_HOURS        			0x03
-#define RV1805_DATE         			0x04
-#define RV1805_MONTHS        			0x05
-#define RV1805_YEARS        			0x06
-#define RV1805_WEEKDAYS      			0x07
-#define RV1805_HUNDREDTHS_ALM           0x08
-#define RV1805_SECONDS_ALM    			0x09
-#define RV1805_MINUTES_ALM     			0x0A
-#define RV1805_HOURS_ALM       			0x0B
-#define RV1805_DATE_ALM        			0x0C
-#define RV1805_MONTHS_ALM      			0x0D
-#define RV1805_WEEKDAYS_ALM    			0x0E
-#define RV1805_STATUS					0x0F
-#define RV1805_CTRL1					0x10
-#define RV1805_CTRL2					0x11
-#define RV1805_INT_MASK					0x12
-#define RV1805_SQW						0x13
-#define RV1805_CAL_XT					0x14
-#define RV1805_CAL_RC_UP				0x15
-#define RV1805_CAL_RC_LO				0x16
-#define RV1805_SLP_CTRL					0x17
-#define RV1805_CTDWN_TMR_CTRL			0x18
-#define RV1805_CTDWN_TMR				0x19
-#define RV1805_TMR_INITIAL				0x1A
-#define RV1805_WATCHDOG_TMR				0x1B
-#define RV1805_OSC_CTRL					0x1C
-#define RV1805_OSC_STATUS				0x1D
-#define RV1805_CONF_KEY					0x1F
-#define RV1805_TRICKLE_CHRG				0x20
-#define RV1805_BREF_CTRL				0x21
-#define RV1805_CAP_RC					0x26
-#define RV1805_IOBATMODE				0x27
-#define RV1805_ID0						0x28
-#define RV1805_ANLG_STAT				0x2F
-#define RV1805_OUT_CTRL					0x30
-#define RV1805_RAM_EXT					0x3F
+#define RV3129_HUNDREDTHS               0x00
+#define RV3129_SECONDS      			0x01
+#define RV3129_MINUTES      			0x02
+#define RV3129_HOURS        			0x03
+#define RV3129_DATE         			0x04
+#define RV3129_MONTHS        			0x05
+#define RV3129_YEARS        			0x06
+#define RV3129_WEEKDAYS      			0x07
+#define RV3129_HUNDREDTHS_ALM           0x08
+#define RV3129_SECONDS_ALM    			0x09
+#define RV3129_MINUTES_ALM     			0x0A
+#define RV3129_HOURS_ALM       			0x0B
+#define RV3129_DATE_ALM        			0x0C
+#define RV3129_MONTHS_ALM      			0x0D
+#define RV3129_WEEKDAYS_ALM    			0x0E
+#define RV3129_STATUS					0x0F
+#define RV3129_CTRL1					0x10
+#define RV3129_CTRL2					0x11
+#define RV3129_INT_MASK					0x12
+#define RV3129_SQW						0x13
+#define RV3129_CAL_XT					0x14
+#define RV3129_CAL_RC_UP				0x15
+#define RV3129_CAL_RC_LO				0x16
+#define RV3129_SLP_CTRL					0x17
+#define RV3129_CTDWN_TMR_CTRL			0x18
+#define RV3129_CTDWN_TMR				0x19
+#define RV3129_TMR_INITIAL				0x1A
+#define RV3129_WATCHDOG_TMR				0x1B
+#define RV3129_OSC_CTRL					0x1C
+#define RV3129_OSC_STATUS				0x1D
+#define RV3129_CONF_KEY					0x1F
+#define RV3129_TRICKLE_CHRG				0x20
+#define RV3129_BREF_CTRL				0x21
+#define RV3129_CAP_RC					0x26
+#define RV3129_IOBATMODE				0x27
+#define RV3129_ID0						0x28
+#define RV3129_ANLG_STAT				0x2F
+#define RV3129_OUT_CTRL					0x30
+#define RV3129_RAM_EXT					0x3F
 
 #define TIME_ARRAY_LENGTH 8 // Total number of writable values in device
 
@@ -156,11 +156,11 @@ enum time_order {
 	TIME_DAY,	     // 7
 };
 
-class RV1805
+class RV3129
 {
   public:
 	
-    RV1805( void );
+    RV3129( void );
 
     boolean begin( TwoWire &wirePort = Wire);
 
