@@ -29,7 +29,8 @@ Distributed as-is; no warranty is given.
 #include <Wire.h>
 
 //The 7-bit I2C address of the RV3129
-#define RV3129_ADDR						(uint8_t)0xAC
+#define RV3129_ADDR						(uint8_t)0x56
+
 
 //The upper part of the part number is always 0x18
 #define RV3129_PART_NUMBER_UPPER		0x18
@@ -119,6 +120,7 @@ Distributed as-is; no warranty is given.
 #define RV3129_DATE_ALM        			0x0C
 #define RV3129_MONTHS_ALM      			0x0D
 #define RV3129_WEEKDAYS_ALM    			0x0E
+*/
 
 #define RV3129_STATUS					0x0F
 #define RV3129_CTRL1					0x10
@@ -144,11 +146,10 @@ Distributed as-is; no warranty is given.
 #define RV3129_ANLG_STAT				0x2F
 #define RV3129_OUT_CTRL					0x30
 #define RV3129_RAM_EXT					0x3F
-*/
 
 
 /**************************
-* Register Names
+* Register Names (RV-3129)
 ***************************/
 // Control Page?
 
@@ -172,17 +173,16 @@ Distributed as-is; no warranty is given.
 #define RV3129_MONTHS_ALM      			0x15
 #define RV3129_YEARS_ALM    			0x16 // (This was not in RV-1805)
 
-#define TIME_ARRAY_LENGTH 8 // Total number of writable values in device
+#define TIME_ARRAY_LENGTH 7 // Total number of writable values in device
 
 enum time_order {
-	TIME_HUNDREDTHS, // 0
-	TIME_SECONDS,    // 1
-	TIME_MINUTES,    // 2
-	TIME_HOURS,      // 3
-	TIME_DATE,       // 4
-	TIME_MONTH,      // 5
-	TIME_YEAR,       // 6
-	TIME_DAY,	     // 7
+	TIME_SECONDS,    // 0
+	TIME_MINUTES,    // 1
+	TIME_HOURS,      // 2
+	TIME_DATE,       // 3
+	TIME_MONTH,      // 4
+	TIME_YEAR,       // 5
+	TIME_DAY,	     // 6
 };
 
 class RV3129
@@ -193,9 +193,8 @@ class RV3129
 
     boolean begin( TwoWire &wirePort = Wire);
 
-	bool setTime(uint8_t hund, uint8_t sec, uint8_t min, uint8_t hour, uint8_t date, uint8_t month, uint16_t year, uint8_t day);
+	bool setTime(uint8_t sec, uint8_t min, uint8_t hour, uint8_t date, uint8_t month, uint16_t year, uint8_t day);
 	bool setTime(uint8_t * time, uint8_t len);
-	bool setHundredths(uint8_t value);
 	bool setSeconds(uint8_t value);
 	bool setMinutes(uint8_t value);
 	bool setHours(uint8_t value);
@@ -211,7 +210,6 @@ class RV3129
 	char* stringTime(); //Return time hh:mm:ss with AM/PM if in 12 hour mode
 	char* stringTimeStamp(); //Return timeStamp in ISO 8601 format yyyy-mm-ddThh:mm:ss
 	
-	uint8_t getHundredths();
 	uint8_t getSeconds();
 	uint8_t getMinutes();
 	uint8_t getHours();
@@ -229,31 +227,31 @@ class RV3129
 	
 	uint8_t status(); //Returns the status byte
 	
-	bool setAlarm(uint8_t sec, uint8_t min, uint8_t hour, uint8_t date, uint8_t month);
-	bool setAlarm(uint8_t * time, uint8_t len);
-	void setAlarmMode(uint8_t mode); //0 to 7, alarm goes off with match of second, minute, hour, etc
+	// bool setAlarm(uint8_t sec, uint8_t min, uint8_t hour, uint8_t date, uint8_t month);
+	// bool setAlarm(uint8_t * time, uint8_t len);
+	// void setAlarmMode(uint8_t mode); //0 to 7, alarm goes off with match of second, minute, hour, etc
  
- 	void enableSleep();
-    void setPowerSwitchFunction(uint8_t function);
-    void setPowerSwitchLock(bool lock);
-    void setStaticPowerSwitchOutput(bool psw); // PSW pin must be unlocked using setPSWLock(false) to enable static PSW output
+ 	// void enableSleep();
+    // void setPowerSwitchFunction(uint8_t function);
+    // void setPowerSwitchLock(bool lock);
+    // void setStaticPowerSwitchOutput(bool psw); // PSW pin must be unlocked using setPSWLock(false) to enable static PSW output
 	
-	void setCountdownTimer(uint8_t duration, uint8_t unit, bool repeat = true, bool pulse = true);
+	// void setCountdownTimer(uint8_t duration, uint8_t unit, bool repeat = true, bool pulse = true);
 
 	void enableTrickleCharge(uint8_t diode = DIODE_0_3V, uint8_t rOut = ROUT_3K); //Diode default 0.3V, rOut default 3k
 	void disableTrickleCharge();
 	void enableLowPower();
 
-	void enableInterrupt(uint8_t source); //Enables a given interrupt within Interrupt Enable register
-	void disableInterrupt(uint8_t source); //Disables a given interrupt within Interrupt Enable register
-	void enableBatteryInterrupt(uint8_t voltage, bool edgeTrigger);
-	void enableAlarmInterrupt(); //Use in conjuction with setAlarm and setAlarmMode
+	// void enableInterrupt(uint8_t source); //Enables a given interrupt within Interrupt Enable register
+	// void disableInterrupt(uint8_t source); //Disables a given interrupt within Interrupt Enable register
+	// void enableBatteryInterrupt(uint8_t voltage, bool edgeTrigger);
+	// void enableAlarmInterrupt(); //Use in conjuction with setAlarm and setAlarmMode
 	
-	void clearInterrupts();
+	// void clearInterrupts();
 	
-	bool checkBattery(uint8_t voltage);
-	void setEdgeTrigger(bool edgeTrigger);
-	void setReferenceVoltage(uint8_t voltage);
+	// bool checkBattery(uint8_t voltage);
+	// void setEdgeTrigger(bool edgeTrigger);
+	// void setReferenceVoltage(uint8_t voltage);
 	
 	//Values in RTC are stored in Binary Coded Decimal. These functions convert to/from Decimal
 	uint8_t BCDtoDEC(uint8_t val); 
