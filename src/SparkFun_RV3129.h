@@ -214,6 +214,7 @@ class RV3129
 	char* stringDate(); //Return date in dd-mm-yyyy
 	char* stringTime(); //Return time hh:mm:ss with AM/PM if in 12 hour mode
 	char* stringTimeStamp(); //Return timeStamp in ISO 8601 format yyyy-mm-ddThh:mm:ss
+	char* stringTemp(); //Return temperature value in Deg. C
 	
 	uint8_t getSeconds();
 	uint8_t getMinutes();

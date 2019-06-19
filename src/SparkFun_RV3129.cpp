@@ -210,6 +210,20 @@ char* RV3129::stringTimeStamp()
 	return(timeStamp);
 }
 
+char* RV3129::stringTemp() {
+	static char tempString[3]
+	uint8_t tempVal = getTemp();
+
+	if (tempVal < 60) {
+		sprintf(tempString, "-%d", (60 - tempVal));
+	}
+	else {
+		sprintf(tempString, "%d", (tempVal - 60));
+	}
+
+	return tempString;
+}
+
 bool RV3129::setTime(uint8_t sec, uint8_t min, uint8_t hour, uint8_t date, uint8_t month, uint16_t year, uint8_t day)
 {
 	_time[TIME_SECONDS] = DECtoBCD(sec);
