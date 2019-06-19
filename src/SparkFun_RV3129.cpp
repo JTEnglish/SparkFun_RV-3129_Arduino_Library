@@ -14,7 +14,7 @@ or concerns with licensing, please contact techsupport@sparkfun.com.
 Distributed as-is; no warranty is given.
 ******************************************************************************/
 
-#include "RV3129-min.h"
+#include "SparkFun_RV3129.h"
 
 //****************************************************************************//
 //
@@ -149,11 +149,6 @@ void RV3129::set24Hour()
 
 		writeRegister(RV3129_HOURS, hour); //Record this to hours register
 	}
-
-	// uint8_t set24bit = 0b01000000;					// setting 6th bit in the hours register sets 24h mode
-	// uint8_t hours_val = readRegister(RV3129_HOURS);	// get current register value
-	// uint8_t new_hours = set24bit | hours_val;
-	// writeRegister(RV3129_HOURS, new_hours);
 }
 
 //Returns true if RTC has been configured for 12 hour mode
@@ -166,13 +161,10 @@ bool RV3129::is12Hour()
 //Returns true if RTC has PM bit set and 12Hour bit set
 bool RV3129::isPM()
 {
-	// uint8_t hourRegister = readRegister(RV3129_HOURS);
-	// if(is12Hour() && (hourRegister & (1<<HOURS_AM_PM)))
-	// 	return(true);
-	// return(false);
-
-	#warning "STUB in function RV3129::isPM() - always returns false"
-	return false;
+	uint8_t hourRegister = readRegister(RV3129_HOURS);
+	if(is12Hour() && (hourRegister & (1<<HOURS_AM_PM)))
+		return(true);
+	return(false);
 }
 
 //Returns a pointer to array of chars that are the date in mm/dd/yyyy format because we're weird
@@ -451,38 +443,4 @@ bool RV3129::readMultipleRegisters(uint8_t addr, uint8_t * dest, uint8_t len)
 	}
 	
 	return(true);
-}
-
-//Enable the charger and set the diode and inline resistor
-//Default is 0.3V for diode and 3k for resistor
-void RV3129::enableTrickleCharge(uint8_t diode, uint8_t rOut)
-{
-	writeRegister(RV3129_CONF_KEY, RV3129_CONF_WRT); //Write the correct value to CONFKEY to unlock this bank of registers
-	uint8_t value = 0;
-	value |= (TRICKLE_ENABLE << TRICKLE_CHARGER_TCS_OFFSET);
-	value |= (diode << TRICKLE_CHARGER_DIODE_OFFSET);
-	value |= (rOut << TRICKLE_CHARGER_ROUT_OFFSET);
-	writeRegister(RV3129_TRICKLE_CHRG, value);
-}
-
-void RV3129::disableTrickleCharge()
-{
-	writeRegister(RV3129_CONF_KEY, RV3129_CONF_WRT);
-	writeRegister(RV3129_TRICKLE_CHRG, (TRICKLE_DISABLE << TRICKLE_CHARGER_TCS_OFFSET));
-}
-
-void RV3129::enableLowPower()
-{
-	//Set various registers to minimize power consumption
-	writeRegister(RV3129_CONF_KEY, RV3129_CONF_WRT); //Write the correct value to CONFKEY to unlock this bank of registers
-	writeRegister(RV3129_IOBATMODE, 0x00); //Disable I2C when on backup power
-
-	writeRegister(RV3129_CONF_KEY, RV3129_CONF_WRT); //Unlock again
-	writeRegister(RV3129_OUT_CTRL, 0x30); //Disable WDI input, Set bit 4, Disable RST in sleep, Disable CLK/INT in sleep
-
-	writeRegister(RV3129_CONF_KEY, RV3129_CONF_OSC); //Unlock again
-	writeRegister(RV3129_OSC_CTRL, 0b11111100); //OSEL=1, ACAL=11, BOS=1, FOS=1, IOPW=1, OFIE=0, ACIE=0	
-	//Use RC Oscillator all the time (to save moar power)
-	//Autocalibrate every 512 seconds to get to 22nA mode
-	//Switch to RC Oscillator when powered by VBackup
 }

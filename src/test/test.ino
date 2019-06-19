@@ -35,12 +35,12 @@ void setup() {
   if (rtc.setToCompilerTime() == false) {
     Serial.println("Something went wrong setting the time");
   }
-  
+
   //Uncomment the below code to set the RTC to your own time
   if (rtc.setTime(sec, minute, hour, date, month, year, day) == false) {
     Serial.println("Something went wrong setting the time");
   }
-  
+
   Serial.println("RTC online!");
 }
 
@@ -51,7 +51,7 @@ void loop() {
   else {
     String currentDate = rtc.stringDateUSA(); //Get the current date in mm/dd/yyyy format
     String currentTime = rtc.stringTime(); //Get the time
-    
+
     Serial.print(currentDate);
     Serial.print(" ");
     Serial.println(currentTime);
