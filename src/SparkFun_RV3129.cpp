@@ -334,6 +334,15 @@ uint8_t RV3129::getYear()
 	return BCDtoDEC(_time[TIME_YEAR]);
 }
 
+uint8_t RV3129::getTemp()
+{
+	// Value Range: -60 to +194 Deg. C
+	// Value Map:
+	// Deg. C 			->	-60		0		190
+	// Int Val (Dec.)	->	0		60		250
+	return readRegister(RV3129_TEMP);
+}
+
 //Takes the time from the last build and uses it as the current time
 //Works very well as an arduino sketch
 bool RV3129::setToCompilerTime()

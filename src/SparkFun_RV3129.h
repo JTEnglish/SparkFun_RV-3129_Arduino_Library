@@ -146,12 +146,11 @@ Distributed as-is; no warranty is given.
 
 
 /**************************
-* Register Names (RV-3129)
+* Registers (RV-3129)
 ***************************/
 // Control Page?
 
 // Clock Page
-// #define RV3129_HUNDREDTHS               0x00 (No Hundredths Register)
 #define RV3129_SECONDS      			0x08
 #define RV3129_MINUTES      			0x09
 #define RV3129_HOURS        			0x0A
@@ -164,7 +163,6 @@ Distributed as-is; no warranty is given.
 #define HOURS_AM_PM						5 // 5th bit in HOURS register -> AM(0) vs PM(1) in 12h mode
 
 // Alarm Page
-// #define RV3129_HUNDREDTHS_ALM           0x08 (No Hundredths Register)
 #define RV3129_SECONDS_ALM    			0x10
 #define RV3129_MINUTES_ALM     			0x11
 #define RV3129_HOURS_ALM       			0x12
@@ -172,6 +170,13 @@ Distributed as-is; no warranty is given.
 #define RV3129_WEEKDAYS_ALM    			0x14
 #define RV3129_MONTHS_ALM      			0x15
 #define RV3129_YEARS_ALM    			0x16 // (This was not in RV-1805)
+
+// Temperature Page
+#define RV3129_TEMP						0x20
+
+/**************************
+* END of Registers (RV-3129)
+***************************/
 
 #define TIME_ARRAY_LENGTH 7 // Total number of writable values in device
 
@@ -217,6 +222,8 @@ class RV3129
 	uint8_t getDate();
 	uint8_t getMonth();
 	uint8_t getYear();	
+
+	uint8_t getTemp();
 	
 	bool setToCompilerTime(); //Uses the hours, mins, etc from compile time to set RTC
 	
