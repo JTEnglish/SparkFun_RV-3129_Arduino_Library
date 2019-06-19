@@ -79,9 +79,9 @@ boolean RV3129::begin(TwoWire &wirePort)
 	// enableTrickleCharge();
 	// enableLowPower();
 
-	uint8_t setting = readRegister(RV3129_CTRL1);
-	setting |= CTRL1_ARST; //Enables clearing of interrupt flags upon read of status register
-	writeRegister(RV3129_CTRL1, setting);
+	// uint8_t setting = readRegister(RV3129_CTRL1);
+	// setting |= CTRL1_ARST; //Enables clearing of interrupt flags upon read of status register
+	// writeRegister(RV3129_CTRL1, setting);
 
 	set12Hour();
 
@@ -97,11 +97,6 @@ void RV3129::set12Hour()
 	{		
 		uint8_t hour = BCDtoDEC(readRegister(RV3129_HOURS)); //Get the current hour in the RTC
 
-		//Set the 12/24 hour bit
-		uint8_t setting = readRegister(RV3129_CTRL1);
-		setting |= (1<<CTRL1_12_24);
-		writeRegister(RV3129_CTRL1, setting);
-
 		//Take the current hours and convert to 12, complete with AM/PM bit
 		boolean pm = false;
 
@@ -116,6 +111,8 @@ void RV3129::set12Hour()
 		}
 		
 		hour = DECtoBCD(hour); //Convert to BCD
+		//Set the 12/24 hour bit to 1
+		hour |= (1<<HOURS_12_24);
 
 		if(pm == true) hour |= (1<<HOURS_AM_PM); //Set AM/PM bit if needed
 
@@ -127,54 +124,43 @@ void RV3129::set12Hour()
 //Converts any current hour setting to 24 hour
 void RV3129::set24Hour()
 {
-	/***************************************
-	* STUB 12-hour to 24-hour conversion
-	* control bits are different for RV3129 
-	****************************************/
-	#warning "STUB in function RV3129::set24Hour() - does not account for change in hour modes"
-	// //Do we need to change anything?
-	// if(is12Hour() == true)
-	// {		
-	// 	//Not sure what changing the CTRL1 register will do to hour register so let's get a copy
-	// 	uint8_t hour = readRegister(RV3129_HOURS); //Get the current 12 hour formatted time in BCD
-	// 	boolean pm = false;
-	// 	if(hour & (1<<HOURS_AM_PM)) //Is the AM/PM bit set?
-	// 	{
-	// 		pm = true;
-	// 		hour &= ~(1<<HOURS_AM_PM); //Clear the bit
-	// 	}
+	//Do we need to change anything?
+	if(is12Hour() == true)
+	{		
+		//Not sure what changing the CTRL1 register will do to hour register so let's get a copy
+		uint8_t hour = readRegister(RV3129_HOURS); //Get the current 12 hour formatted time in BCD
+		boolean pm = false;
+		if(hour & (1<<HOURS_AM_PM)) //Is the AM/PM bit set?
+		{
+			pm = true;
+			hour &= ~(1<<HOURS_AM_PM); //Clear the bit
+		}
+
+		//Given a BCD hour in the 1-12 range, make it 24
+		hour = BCDtoDEC(hour); //Convert core of register to DEC
 		
-	// 	//Change to 24 hour mode
-	// 	uint8_t setting = readRegister(RV3129_CTRL1);
-	// 	setting &= ~(1<<CTRL1_12_24); //Clear the 12/24 hr bit
-	// 	writeRegister(RV3129_CTRL1, setting);
+		if(pm == true) hour += 12; //2PM becomes 14
+		if(hour == 12) hour = 0; //12AM stays 12, but should really be 0
+		if(hour == 24) hour = 12; //12PM becomes 24, but should really be 12
 
-	// 	//Given a BCD hour in the 1-12 range, make it 24
-	// 	hour = BCDtoDEC(hour); //Convert core of register to DEC
-		
-	// 	if(pm == true) hour += 12; //2PM becomes 14
-	// 	if(hour == 12) hour = 0; //12AM stays 12, but should really be 0
-	// 	if(hour == 24) hour = 12; //12PM becomes 24, but should really be 12
+		hour = DECtoBCD(hour); //Convert to BCD
+		//Change to 24 hour mode
+		hour &= ~(1<<HOURS_12_24);
 
-	// 	hour = DECtoBCD(hour); //Convert to BCD
+		writeRegister(RV3129_HOURS, hour); //Record this to hours register
+	}
 
-	// 	writeRegister(RV3129_HOURS, hour); //Record this to hours register
-	// }
-
-	uint8_t set24bit = 0b01000000;					// setting 6th bit in the hours register sets 24h mode
-	uint8_t hours_val = readRegister(RV3129_HOURS);	// get current register value
-	uint8_t new_hours = set24bit | hours_val;
-	writeRegister(RV3129_HOURS, new_hours);
+	// uint8_t set24bit = 0b01000000;					// setting 6th bit in the hours register sets 24h mode
+	// uint8_t hours_val = readRegister(RV3129_HOURS);	// get current register value
+	// uint8_t new_hours = set24bit | hours_val;
+	// writeRegister(RV3129_HOURS, new_hours);
 }
 
 //Returns true if RTC has been configured for 12 hour mode
 bool RV3129::is12Hour()
 {
-	// uint8_t controlRegister = readRegister(RV3129_CTRL1);
-	// return(controlRegister & (1<<CTRL1_12_24));
-
-	#warning "STUB in function RV3129::is12Hour() - always returns false"
-	return false;
+	uint8_t hoursVal = readRegister(RV3129_HOURS);
+	return(hoursVal & (1 << HOURS_12_24));
 }
 
 //Returns true if RTC has PM bit set and 12Hour bit set

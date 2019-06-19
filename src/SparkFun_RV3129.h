@@ -42,12 +42,9 @@ Distributed as-is; no warranty is given.
 
 //Bits in Control1 Register
 #define CTRL1_STOP	7
-#define CTRL1_12_24	6
+// #define CTRL1_12_24	6
 #define CTRL1_PSWB	5
 #define CTRL1_ARST						1 << 2 //Enables reset of interrupt flags in status register 
-
-//Bits in Hours register
-#define HOURS_AM_PM						5
 
 //Trickle Charge Control
 #define TRICKLE_CHARGER_TCS_OFFSET				4
@@ -162,6 +159,9 @@ Distributed as-is; no warranty is given.
 #define RV3129_WEEKDAYS      			0x0C
 #define RV3129_MONTHS        			0x0D
 #define RV3129_YEARS        			0x0E
+
+#define HOURS_12_24						6 // 6th bit in HOURS register determines 12h(1) vs 24h(0) mode
+#define HOURS_AM_PM						5 // 5th bit in HOURS register -> AM(0) vs PM(1) in 12h mode
 
 // Alarm Page
 // #define RV3129_HUNDREDTHS_ALM           0x08 (No Hundredths Register)
