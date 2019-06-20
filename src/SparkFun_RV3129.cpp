@@ -211,7 +211,7 @@ char* RV3129::stringTimeStamp()
 }
 
 char* RV3129::stringTemp() {
-	static char tempString[3]
+	static char tempString[3];
 	uint8_t tempVal = getTemp();
 
 	if (tempVal < 60) {
