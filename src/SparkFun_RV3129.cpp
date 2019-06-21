@@ -357,6 +357,29 @@ uint8_t RV3129::getTemp()
 	return readRegister(RV3129_TEMP);
 }
 
+bool RV1805::setAlarm(uint8_t sec, uint8_t min, uint8_t hour, uint8_t date, uint8_t week_day, uint8_t month, uint8_t year)
+{
+	uint8_t alarmTime[ALARM_ARRAY_LENGTH];
+	
+	alarmTime[TIME_SECONDS] = DECtoBCD(sec);
+	alarmTime[TIME_MINUTES] = DECtoBCD(min);
+	alarmTime[TIME_HOURS] = DECtoBCD(hour);
+	alarmTime[TIME_DATE] = DECtoBCD(date);
+	alarmTime[TIME_DAY] = DECtoBCD(week_day);
+	alarmTime[TIME_MONTH] = DECtoBCD(month);
+	alarmTime[TIME_YEAR] = DECtoBCD(year);
+	
+	return setAlarm(alarmTime, ALARM_ARRAY_LENGTH);
+}
+
+bool RV1805::setAlarm(uint8_t * alarmTime, uint8_t len)
+{
+	if (len != ALARM_ARRAY_LENGTH)
+		return false;
+	
+	return writeMultipleRegisters(RV3129_SECONDS_ALM, alarmTime, ALARM_ARRAY_LENGTH);
+}
+
 //Takes the time from the last build and uses it as the current time
 //Works very well as an arduino sketch
 bool RV3129::setToCompilerTime()

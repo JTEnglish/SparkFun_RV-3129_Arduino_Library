@@ -179,15 +179,16 @@ Distributed as-is; no warranty is given.
 ***************************/
 
 #define TIME_ARRAY_LENGTH 7 // Total number of writable values in device
+#define ALARM_ARRAY_LENGTH 7
 
 enum time_order {
 	TIME_SECONDS,    // 0
 	TIME_MINUTES,    // 1
 	TIME_HOURS,      // 2
 	TIME_DATE,       // 3
-	TIME_MONTH,      // 4
-	TIME_YEAR,       // 5
-	TIME_DAY,	     // 6
+	TIME_DAY,		 // 4
+	TIME_MONTH,      // 5
+	TIME_YEAR		 // 6
 };
 
 class RV3129
@@ -235,9 +236,9 @@ class RV3129
 	
 	uint8_t status(); //Returns the status byte
 	
-	// bool setAlarm(uint8_t sec, uint8_t min, uint8_t hour, uint8_t date, uint8_t month);
-	// bool setAlarm(uint8_t * time, uint8_t len);
-	// void setAlarmMode(uint8_t mode); //0 to 7, alarm goes off with match of second, minute, hour, etc
+	bool setAlarm(uint8_t sec, uint8_t min, uint8_t hour, uint8_t date, uint8_t week_day, uint8_t month, uint8_t year);
+	bool setAlarm(uint8_t * time, uint8_t len);
+	void setAlarmMode(uint8_t mode); //0 to 7, alarm goes off with match of second, minute, hour, etc
  
  	// void enableSleep();
     // void setPowerSwitchFunction(uint8_t function);
