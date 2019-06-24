@@ -21,25 +21,23 @@ void setup() {
 
   Wire.begin();
 
-  Serial.begin(9600);
+  Serial.begin(115200);
   Serial.println("Read Time from RTC Example");
 
   if (rtc.begin() == false) {
     Serial.println("Something went wrong, check wiring");
   }
 
-  rtc.set24Hour();
+  rtc.set12Hour();
 
-  //Use the time from the Arduino compiler (build time) to set the RTC
-  //Keep in mind that Arduino does not get the new compiler time every time it compiles. to ensure the proper time is loaded, open up a fresh version of the IDE and load the sketch.
   if (rtc.setToCompilerTime() == false) {
     Serial.println("Something went wrong setting the time");
   }
 
   //Uncomment the below code to set the RTC to your own time
-  if (rtc.setTime(sec, minute, hour, date, month, year, day) == false) {
-    Serial.println("Something went wrong setting the time");
-  }
+//  if (rtc.setTime(sec, minute, hour, date, month, year, day) == false) {
+//    Serial.println("Something went wrong setting the time");
+//  }
 
   Serial.println("RTC online!");
 }
@@ -52,9 +50,14 @@ void loop() {
     String currentDate = rtc.stringDateUSA(); //Get the current date in mm/dd/yyyy format
     String currentTime = rtc.stringTime(); //Get the time
 
+    char currentTemp[15];
+    sprintf(currentTemp, "Deg. C: %s", rtc.stringTemp());
+
     Serial.print(currentDate);
     Serial.print(" ");
     Serial.println(currentTime);
+
+    Serial.println(currentTemp);
   }
 
   delay(1000);
