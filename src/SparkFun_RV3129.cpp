@@ -382,7 +382,7 @@ bool RV3129::setAlarm(uint8_t * alarmTime, uint8_t len)
 
 bool RV3129::enableDisableAlarm(uint8_t enableBits) {
 	uint8_t alarmTime[ALARM_ARRAY_LENGTH];
-	if ( !readMultipleRegisters(uint8_t addr, uint8_t * dest, uint8_t len) ) {
+	if ( !readMultipleRegisters(RV3129_SECONDS_ALM, alarmTime, ALARM_ARRAY_LENGTH) ) {
 		return false;
 	}
 

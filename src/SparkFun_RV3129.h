@@ -238,7 +238,7 @@ class RV3129
 	
 	bool setAlarm(uint8_t sec, uint8_t min, uint8_t hour, uint8_t date, uint8_t week_day, uint8_t month, uint8_t year);
 	bool setAlarm(uint8_t * time, uint8_t len);
-	bool enableDisableAlarm(uint8_t enableBits) //bits 0 to 7, alarm goes off with match of second, minute, hour, etc
+	bool enableDisableAlarm(uint8_t enableBits); //bits 0 to 7, alarm goes off with match of second, minute, hour, etc
  
  	// void enableSleep();
     // void setPowerSwitchFunction(uint8_t function);
