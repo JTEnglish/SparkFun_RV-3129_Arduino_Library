@@ -357,7 +357,7 @@ uint8_t RV3129::getTemp()
 	return readRegister(RV3129_TEMP);
 }
 
-bool RV1805::setAlarm(uint8_t sec, uint8_t min, uint8_t hour, uint8_t date, uint8_t week_day, uint8_t month, uint8_t year)
+bool RV3129::setAlarm(uint8_t sec, uint8_t min, uint8_t hour, uint8_t date, uint8_t week_day, uint8_t month, uint8_t year)
 {
 	uint8_t alarmTime[ALARM_ARRAY_LENGTH];
 	
@@ -372,11 +372,28 @@ bool RV1805::setAlarm(uint8_t sec, uint8_t min, uint8_t hour, uint8_t date, uint
 	return setAlarm(alarmTime, ALARM_ARRAY_LENGTH);
 }
 
-bool RV1805::setAlarm(uint8_t * alarmTime, uint8_t len)
+bool RV3129::setAlarm(uint8_t * alarmTime, uint8_t len)
 {
 	if (len != ALARM_ARRAY_LENGTH)
 		return false;
 	
+	return writeMultipleRegisters(RV3129_SECONDS_ALM, alarmTime, ALARM_ARRAY_LENGTH);
+}
+
+bool RV3129::enableDisableAlarm(uint8_t enableBits) {
+	uint8_t alarmTime[ALARM_ARRAY_LENGTH];
+	if ( !readMultipleRegisters(uint8_t addr, uint8_t * dest, uint8_t len) ) {
+		return false;
+	}
+
+	alarmTime[TIME_SECONDS] |= (((enableBits >> TIME_SECONDS) & 1 ) << 7);
+	alarmTime[TIME_MINUTES] |= (((enableBits >> TIME_MINUTES) & 1 ) << 7);
+	alarmTime[TIME_HOURS]   |= (((enableBits >> TIME_HOURS) & 1 ) << 7);
+	alarmTime[TIME_DATE] 	|= (((enableBits >> TIME_DATE) & 1 ) << 7);
+	alarmTime[TIME_DAY] 	|= (((enableBits >> TIME_DAY) & 1 ) << 7);
+	alarmTime[TIME_MONTH] 	|= (((enableBits >> TIME_MONTH) & 1 ) << 7);
+	alarmTime[TIME_YEAR] 	|= (((enableBits >> TIME_YEAR) & 1 ) << 7);
+
 	return writeMultipleRegisters(RV3129_SECONDS_ALM, alarmTime, ALARM_ARRAY_LENGTH);
 }
 
