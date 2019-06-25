@@ -148,7 +148,11 @@ Distributed as-is; no warranty is given.
 /**************************
 * Registers (RV-3129)
 ***************************/
-// Control Page?
+// Control Page
+#define RV3129_CTRL_INT					0x01
+#define RV3129_CTRL_INT_FLAG			0x02
+
+
 
 // Clock Page
 #define RV3129_SECONDS      			0x08
@@ -241,6 +245,9 @@ class RV3129
 	bool enableDisableAlarm(uint8_t enableBits); //bits 0 to 6, alarm goes off with match of second, minute, hour, etc
 	uint8_t getAlarmMode(); //bits 0 to 6, alarm goes off with match of second, minute, hour, etc
 							// (mode > 0x7f) => read registers error
+	bool getAlarmFlag(); // 0: no alarm interrupt, 1: alarm interrupt generated when Time & Date matches Alarm setting
+	bool alarmINTEnabled(); // 0: disabled, 1: enabled
+	bool enableAlarmINT(bool enableINT);
 							
  
  	// void enableSleep();

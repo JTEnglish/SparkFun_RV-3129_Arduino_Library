@@ -29,23 +29,22 @@ void setup() {
 
   rtc.set12Hour();
 
-  if (rtc.setToCompilerTime() == false) {
-    Serial.println("Something went wrong setting the time");
-  }
-
-  //Uncomment the below code to set the RTC to your own time
-//  if (rtc.setTime(sec, minute, hour, date, month, year, day) == false) {
+//  if (rtc.setToCompilerTime() == false) {
 //    Serial.println("Something went wrong setting the time");
 //  }
 
+  if (rtc.setTime(sec, minute, hour, date, month, year, day) == false) {
+    Serial.println("Something went wrong setting the time");
+  }
+
   Serial.println("RTC online!");
 
-  // set alarm
-  if (rtc.setAlarm(sec, minute, hour, date, day, month, year) == false) {
+  // set alarm for one minute after init time
+  if (rtc.setAlarm(sec, (minute + 1), hour, date, day, month, year) == false) {
     Serial.println("Failed to set alarm.");
   }
   // set alarm mode
-  uint8_t mode = 0b1101101;
+  uint8_t mode = 0b0000011;
   if (rtc.enableDisableAlarm(mode) == false) {
     Serial.println("Failed to set alarm enable/disable bits.");
   }
@@ -58,6 +57,28 @@ void setup() {
     Serial.print("Alarm Mode: ");
     Serial.println(mode, BIN);
   }
+
+  // enable alarm interrupt
+  if (rtc.enableAlarmINT(true) == false) {
+    Serial.println("Failed to enable alarm interrupt.");
+  }
+  // check alarm INT enabled
+  Serial.print("Alarm INT Enabled: ");
+  Serial.println(rtc.alarmINTEnabled());
+  // disable alarm INT
+  if (rtc.enableAlarmINT(false) == false) {
+    Serial.println("Failed to enable alarm interrupt.");
+  }
+  // check alarm INT enabled
+  Serial.print("Alarm INT Enabled: ");
+  Serial.println(rtc.alarmINTEnabled());
+  // enable alarm interrupt
+  if (rtc.enableAlarmINT(true) == false) {
+    Serial.println("Failed to enable alarm interrupt.");
+  }
+  // check alarm INT enabled
+  Serial.print("Alarm INT Enabled: ");
+  Serial.println(rtc.alarmINTEnabled());
 }
 
 void loop() {
@@ -76,6 +97,9 @@ void loop() {
     Serial.println(currentTime);
 
     Serial.println(currentTemp);
+
+    Serial.print("Alarm INT Flag State: ");
+    Serial.println(rtc.getAlarmFlag());
   }
 
   delay(1000);

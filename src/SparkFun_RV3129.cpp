@@ -416,6 +416,34 @@ uint8_t RV3129::getAlarmMode() {
 	return mode;
 }
 
+bool RV3129::getAlarmFlag() {
+	uint8_t ctrlINTFlag_value = readRegister(RV3129_CTRL_INT_FLAG); // (0xFF) -> Error
+	// if (ctrlINTFlag_value == 0xFF) ...?
+	#warning "function getAlarmFlag does not verify successful readRegister call"
+	return ctrlINTFlag_value & 1;
+}
+
+bool RV3129::alarmINTEnabled() {
+	uint8_t ctrlINT_value = readRegister(RV3129_CTRL_INT); // (0xFF) -> Error
+	// if (ctrlINTFlag_value == 0xFF) ...?
+	#warning "function alarmINTEnabled does not verify successful readRegister call"
+	return ctrlINT_value & 1;
+}
+
+bool RV3129::enableAlarmINT(bool enableINT) {
+	uint8_t ctrlINT_value = readRegister(RV3129_CTRL_INT);
+	if (ctrlINT_value == 0xFF) {
+		return false; // error
+	}
+
+	uint8_t bit_pos = 0; // bit position for AIE
+
+	// clear bit, then set to parameter value
+	uint8_t new_ctrlINT_val = (ctrlINT_value & ~(1 << bit_pos)) | (enableINT << bit_pos);
+
+	return writeRegister(RV3129_CTRL_INT, new_ctrlINT_val);
+}
+
 //Takes the time from the last build and uses it as the current time
 //Works very well as an arduino sketch
 bool RV3129::setToCompilerTime()
