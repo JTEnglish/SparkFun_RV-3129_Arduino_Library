@@ -6,7 +6,6 @@
 
 RV3129 rtc;
 
-int hund = 0;
 int sec = 2;
 int minute = 18;
 int hour = 21;
@@ -40,6 +39,25 @@ void setup() {
 //  }
 
   Serial.println("RTC online!");
+
+  // set alarm
+  if (rtc.setAlarm(sec, minute, hour, date, day, month, year) == false) {
+    Serial.println("Failed to set alarm.");
+  }
+  // set alarm mode
+  uint8_t mode = 0b1101101;
+  if (rtc.enableDisableAlarm(mode) == false) {
+    Serial.println("Failed to set alarm enable/disable bits.");
+  }
+  // get alarm mode
+  mode = rtc.getAlarmMode();
+  if (mode > 0x7f) {
+    Serial.println("Failed to get alarm mode.");
+  }
+  else {
+    Serial.print("Alarm Mode: ");
+    Serial.println(mode, BIN);
+  }
 }
 
 void loop() {

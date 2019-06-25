@@ -397,6 +397,25 @@ bool RV3129::enableDisableAlarm(uint8_t enableBits) {
 	return writeMultipleRegisters(RV3129_SECONDS_ALM, alarmTime, ALARM_ARRAY_LENGTH);
 }
 
+uint8_t RV3129::getAlarmMode() {
+	uint8_t alarmTime[ALARM_ARRAY_LENGTH];
+	if ( !readMultipleRegisters(RV3129_SECONDS_ALM, alarmTime, ALARM_ARRAY_LENGTH) ) {
+		return (1 << 7); // error
+	}
+
+	uint8_t mode = 0;
+	
+	mode |= (alarmTime[TIME_SECONDS] & (1 << 7)) >> (7 - TIME_SECONDS);
+	mode |= (alarmTime[TIME_MINUTES] & (1 << 7)) >> (7 - TIME_MINUTES);
+	mode |= (alarmTime[TIME_HOURS]   & (1 << 7)) >> (7 - TIME_HOURS);
+	mode |= (alarmTime[TIME_DATE]    & (1 << 7)) >> (7 - TIME_DATE);
+	mode |= (alarmTime[TIME_DAY]     & (1 << 7)) >> (7 - TIME_DAY);
+	mode |= (alarmTime[TIME_MONTH]   & (1 << 7)) >> (7 - TIME_MONTH);
+	mode |= (alarmTime[TIME_YEAR]    & (1 << 7)) >> (7 - TIME_YEAR);
+
+	return mode;
+}
+
 //Takes the time from the last build and uses it as the current time
 //Works very well as an arduino sketch
 bool RV3129::setToCompilerTime()
