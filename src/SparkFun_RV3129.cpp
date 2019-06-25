@@ -489,6 +489,11 @@ bool RV3129::setToCompilerTime()
 	return setTime(_time, TIME_ARRAY_LENGTH);
 }
 
+bool RV3129::systemReset() {
+	// set reset bit in control page
+	return writeRegister(RV3129_CTRL_RESET, 0x10);
+}
+
 uint8_t RV3129::BCDtoDEC(uint8_t val)
 {
 	return ( ( val / 0x10) * 10 ) + ( val % 0x10 );

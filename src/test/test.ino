@@ -95,11 +95,16 @@ void loop() {
     Serial.print(currentDate);
     Serial.print(" ");
     Serial.println(currentTime);
-
     Serial.println(currentTemp);
 
+    bool alarmINT = rtc.getAlarmFlag();
+
     Serial.print("Alarm INT Flag State: ");
-    Serial.println(rtc.getAlarmFlag());
+    Serial.println(alarmINT);
+
+    if (alarmINT) {
+      rtc.systemReset();
+    }
   }
 
   delay(1000);

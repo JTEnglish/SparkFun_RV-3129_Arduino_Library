@@ -151,8 +151,7 @@ Distributed as-is; no warranty is given.
 // Control Page
 #define RV3129_CTRL_INT					0x01
 #define RV3129_CTRL_INT_FLAG			0x02
-
-
+#define RV3129_CTRL_RESET				0x04
 
 // Clock Page
 #define RV3129_SECONDS      			0x08
@@ -248,6 +247,8 @@ class RV3129
 	bool getAlarmFlag(); // 0: no alarm interrupt, 1: alarm interrupt generated when Time & Date matches Alarm setting
 	bool alarmINTEnabled(); // 0: disabled, 1: enabled
 	bool enableAlarmINT(bool enableINT);
+
+	bool systemReset();
 							
  
  	// void enableSleep();
