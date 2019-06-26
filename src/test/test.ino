@@ -7,11 +7,11 @@
 RV3129 rtc;
 
 int sec = 2;
-int minute = 18;
-int hour = 21;
+int minute = 59;
+uint8_t hour = 9;
 int date = 25;
 int month = 5;
-int year = 14;
+int year = 2014;
 int day = 5;
 
 unsigned long startTime;

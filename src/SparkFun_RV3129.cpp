@@ -194,7 +194,8 @@ char* RV3129::stringTime()
 		char half = 'A';
 		if(isPM()) half = 'P';
 		
-		sprintf(time, "%02d:%02d:%02d%cM", BCDtoDEC(_time[TIME_HOURS]), BCDtoDEC(_time[TIME_MINUTES]), BCDtoDEC(_time[TIME_SECONDS]), half);
+		// hours register now has setting bits, print BCDtoDEC( hour & 0b11111) to ignore upper control bits
+		sprintf(time, "%02d:%02d:%02d%cM", BCDtoDEC(_time[TIME_HOURS] & 0b11111), BCDtoDEC(_time[TIME_MINUTES]), BCDtoDEC(_time[TIME_SECONDS]), half);
 	}
 	else sprintf(time, "%02d:%02d:%02d", BCDtoDEC(_time[TIME_HOURS]), BCDtoDEC(_time[TIME_MINUTES]), BCDtoDEC(_time[TIME_SECONDS]));
 	
