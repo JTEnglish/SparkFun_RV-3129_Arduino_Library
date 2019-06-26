@@ -445,6 +445,42 @@ bool RV3129::enableAlarmINT(bool enableINT) {
 	return writeRegister(RV3129_CTRL_INT, new_ctrlINT_val);
 }
 
+bool RV3129::setTimer(uint16_t time16) {
+	uint8_t time8[2];
+	time8[0] = time16 & 0xff;	// lower
+	time8[1] = time16 >> 8;		// upper
+
+	return writeMultipleRegisters(RV3129_TIME_LOW, time8, 2);
+}
+
+bool RV3129::getTimerFlag() {
+	uint8_t ctrlINTFlag_value = readRegister(RV3129_CTRL_INT_FLAG);
+	#warning "function getTimerFlag does not verify successful readRegister call"
+	
+	return (ctrlINTFlag_value >> 1) & 1;
+}
+
+bool RV3129::timerINTEnabled() {
+	uint8_t ctrlINT_value = readRegister(RV3129_CTRL_INT);
+	#warning "function timerINTEnabled does not verify successful readRegister call"
+	
+	return (ctrlINT_value >> 1) & 1;
+}
+
+bool RV3129::enableTimerINT(bool enableTimer) {
+	uint8_t ctrlINT_value = readRegister(RV3129_CTRL_INT);
+	if (ctrlINT_value == 0xFF) {
+		return false; // error
+	}
+
+	uint8_t bit_pos = 1; // bit position for TIE
+
+	// clear bit, then set to parameter value
+	uint8_t new_ctrlINT_val = (ctrlINT_value & ~(1 << bit_pos)) | (enableTimer << bit_pos);
+
+	return writeRegister(RV3129_CTRL_INT, new_ctrlINT_val);
+}
+
 //Takes the time from the last build and uses it as the current time
 //Works very well as an arduino sketch
 bool RV3129::setToCompilerTime()

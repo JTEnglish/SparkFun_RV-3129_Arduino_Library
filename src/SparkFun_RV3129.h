@@ -174,6 +174,10 @@ Distributed as-is; no warranty is given.
 #define RV3129_MONTHS_ALM      			0x15
 #define RV3129_YEARS_ALM    			0x16 // (This was not in RV-1805)
 
+// Timer Page
+#define RV3129_TIME_LOW					0x18
+#define RV3129_TIME_HIGH				0x19
+
 // Temperature Page
 #define RV3129_TEMP						0x20
 
@@ -247,6 +251,11 @@ class RV3129
 	bool getAlarmFlag(); // 0: no alarm interrupt, 1: alarm interrupt generated when Time & Date matches Alarm setting
 	bool alarmINTEnabled(); // 0: disabled, 1: enabled
 	bool enableAlarmINT(bool enableINT);
+
+	bool setTimer(uint16_t time16);
+	bool getTimerFlag();
+	bool timerINTEnabled();
+	bool enableTimerINT(bool enableTimer);
 
 	bool systemReset();
 							
