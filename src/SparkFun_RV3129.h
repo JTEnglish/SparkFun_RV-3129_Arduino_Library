@@ -149,6 +149,7 @@ Distributed as-is; no warranty is given.
 * Registers (RV-3129)
 ***************************/
 // Control Page
+#define RV3129_CTRL_1					0x00
 #define RV3129_CTRL_INT					0x01
 #define RV3129_CTRL_INT_FLAG			0x02
 #define RV3129_CTRL_RESET				0x04
@@ -256,10 +257,11 @@ class RV3129
 	bool getTimerFlag();
 	bool timerINTEnabled();
 	bool enableTimerINT(bool enableTimer);
+	bool enableTimerAutoReload(bool enableTAR);
+	bool timerAutoReloadEnabled();
 
 	bool systemReset();
-							
- 
+
  	// void enableSleep();
     // void setPowerSwitchFunction(uint8_t function);
     // void setPowerSwitchLock(bool lock);

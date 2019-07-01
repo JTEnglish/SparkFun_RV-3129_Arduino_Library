@@ -531,6 +531,28 @@ bool RV3129::systemReset() {
 	return writeRegister(RV3129_CTRL_RESET, 0x10);
 }
 
+
+bool RV3129::enableTimerAutoReload(bool enableTAR) {
+	uint8_t ctrl_1_value = readRegister(RV3129_CTRL_1);
+	if (ctrl_1_value == 0xFF) {
+		return false; // error
+	}
+
+	uint8_t bit_pos = 2; // bit position for TAR
+
+	// clear bit, then set to parameter value
+	uint8_t new_ctrl_1_value = (ctrl_1_value & ~(1 << bit_pos)) | (enableTAR << bit_pos);
+
+	return writeRegister(RV3129_CTRL_1, new_ctrl_1_value);
+}
+
+bool RV3129::timerAutoReloadEnabled() {
+	uint8_t ctrl_1_value = readRegister(RV3129_CTRL_1);
+	#warning "function timerAutoReloadEnabled does not verify successful readRegister call"
+	
+	return (ctrl_1_value >> 2) & 1;
+}
+
 uint8_t RV3129::BCDtoDEC(uint8_t val)
 {
 	return ( ( val / 0x10) * 10 ) + ( val % 0x10 );
