@@ -119,30 +119,30 @@ Distributed as-is; no warranty is given.
 #define RV3129_WEEKDAYS_ALM    			0x0E
 */
 
-#define RV3129_STATUS					0x0F
-#define RV3129_CTRL1					0x10
-#define RV3129_CTRL2					0x11
-#define RV3129_INT_MASK					0x12
-#define RV3129_SQW						0x13
-#define RV3129_CAL_XT					0x14
-#define RV3129_CAL_RC_UP				0x15
-#define RV3129_CAL_RC_LO				0x16
-#define RV3129_SLP_CTRL					0x17
-#define RV3129_CTDWN_TMR_CTRL			0x18
-#define RV3129_CTDWN_TMR				0x19
-#define RV3129_TMR_INITIAL				0x1A
-#define RV3129_WATCHDOG_TMR				0x1B
-#define RV3129_OSC_CTRL					0x1C
-#define RV3129_OSC_STATUS				0x1D
-#define RV3129_CONF_KEY					0x1F
-#define RV3129_TRICKLE_CHRG				0x20
-#define RV3129_BREF_CTRL				0x21
-#define RV3129_CAP_RC					0x26
-#define RV3129_IOBATMODE				0x27
-#define RV3129_ID0						0x28
-#define RV3129_ANLG_STAT				0x2F
-#define RV3129_OUT_CTRL					0x30
-#define RV3129_RAM_EXT					0x3F
+// #define RV3129_STATUS					0x0F
+// #define RV3129_CTRL1					0x10
+// #define RV3129_CTRL2					0x11
+// #define RV3129_INT_MASK					0x12
+// #define RV3129_SQW						0x13
+// #define RV3129_CAL_XT					0x14
+// #define RV3129_CAL_RC_UP				0x15
+// #define RV3129_CAL_RC_LO				0x16
+// #define RV3129_SLP_CTRL					0x17
+// #define RV3129_CTDWN_TMR_CTRL			0x18
+// #define RV3129_CTDWN_TMR				0x19
+// #define RV3129_TMR_INITIAL				0x1A
+// #define RV3129_WATCHDOG_TMR				0x1B
+// #define RV3129_OSC_CTRL					0x1C
+// #define RV3129_OSC_STATUS				0x1D
+// #define RV3129_CONF_KEY					0x1F
+// #define RV3129_TRICKLE_CHRG				0x20
+// #define RV3129_BREF_CTRL				0x21
+// #define RV3129_CAP_RC					0x26
+// #define RV3129_IOBATMODE				0x27
+// #define RV3129_ID0						0x28
+// #define RV3129_ANLG_STAT				0x2F
+// #define RV3129_OUT_CTRL					0x30
+// #define RV3129_RAM_EXT					0x3F
 
 
 /**************************
@@ -182,6 +182,9 @@ Distributed as-is; no warranty is given.
 // Temperature Page
 #define RV3129_TEMP						0x20
 
+// RAM Page
+#define RV3129_User_RAM					0x38
+
 /**************************
 * END of Registers (RV-3129)
 ***************************/
@@ -206,6 +209,7 @@ class RV3129
     RV3129( void );
 
     boolean begin( TwoWire &wirePort = Wire);
+	void initMSG();
 
 	bool setTime(uint8_t sec, uint8_t min, uint8_t hour, uint8_t date, uint8_t month, uint16_t year, uint8_t day);
 	bool setTime(uint8_t * time, uint8_t len);
@@ -261,6 +265,24 @@ class RV3129
 	bool timerAutoReloadEnabled();
 
 	bool systemReset();
+
+	bool enableWatch1HzClkSrc(bool enableWE);
+	bool watch1HzClkSrcEnabled();
+
+	bool enableAutomaticEEPROMRefresh(bool enableEERE);
+	bool automaticEEPROMRefreshEnabled();
+
+	bool enableSelfRecovery(bool enableSR);
+	bool selfRecoveryEnabled();
+
+	bool setCountdownTimerSource(uint8_t srcTD); // valid param value range: 0b00 to 0b11
+	uint8_t getCountdownTimerSource(); // returns 0xFF on error. Valid return value range: 0b00 to 0b11
+
+	bool setCLKOUTPinFunction(bool clkFoo); // 0: INT function on CLKOUT pin, 1: CLKOUT function on CLKOUT pin
+	bool getCLKOUTPinFunction();
+
+	uint8_t getCTRL1Register();
+	bool setCTRL1Register(uint8_t ctrl);
 
  	// void enableSleep();
     // void setPowerSwitchFunction(uint8_t function);

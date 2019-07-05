@@ -84,6 +84,7 @@ boolean RV3129::begin(TwoWire &wirePort)
 	// writeRegister(RV3129_CTRL1, setting);
 
 	set12Hour();
+	initMSG();
 
 	return(true);
 }
@@ -551,6 +552,130 @@ bool RV3129::timerAutoReloadEnabled() {
 	#warning "function timerAutoReloadEnabled does not verify successful readRegister call"
 	
 	return (ctrl_1_value >> 2) & 1;
+}
+
+bool RV3129::enableWatch1HzClkSrc(bool enableWE) {
+	uint8_t ctrl_1_value = readRegister(RV3129_CTRL_1);
+	if (ctrl_1_value == 0xFF) {
+		return false; // error
+	}
+
+	uint8_t bit_pos = 0; // bit position for WE
+
+	// clear bit, then set to parameter value
+	uint8_t new_ctrl_1_value = (ctrl_1_value & ~(1 << bit_pos)) | (enableWE << bit_pos);
+
+	return writeRegister(RV3129_CTRL_1, new_ctrl_1_value);
+}
+
+bool RV3129::watch1HzClkSrcEnabled() {
+	uint8_t ctrl_1_value = readRegister(RV3129_CTRL_1);
+	#warning "function timerAutoReloadEnabled does not verify successful readRegister call"
+	
+	return ctrl_1_value & 1;
+}
+
+bool RV3129::enableAutomaticEEPROMRefresh(bool enableEERE) {
+	uint8_t ctrl_1_value = readRegister(RV3129_CTRL_1);
+	if (ctrl_1_value == 0xFF) {
+		return false; // error
+	}
+
+	uint8_t bit_pos = 3; // bit position for EERE
+
+	// clear bit, then set to parameter value
+	uint8_t new_ctrl_1_value = (ctrl_1_value & ~(1 << bit_pos)) | (enableEERE << bit_pos);
+
+	return writeRegister(RV3129_CTRL_1, new_ctrl_1_value);
+}
+
+bool RV3129::automaticEEPROMRefreshEnabled() {
+	uint8_t ctrl_1_value = readRegister(RV3129_CTRL_1);
+	#warning "function timerAutoReloadEnabled does not verify successful readRegister call"
+	
+	return (ctrl_1_value >> 3) & 1;
+}
+
+bool RV3129::enableSelfRecovery(bool enableSR) {
+	uint8_t ctrl_1_value = readRegister(RV3129_CTRL_1);
+	if (ctrl_1_value == 0xFF) {
+		return false; // error
+	}
+
+	uint8_t bit_pos = 4; // bit position for SR
+
+	// clear bit, then set to parameter value
+	uint8_t new_ctrl_1_value = (ctrl_1_value & ~(1 << bit_pos)) | (enableSR << bit_pos);
+
+	return writeRegister(RV3129_CTRL_1, new_ctrl_1_value);
+}
+
+bool RV3129::selfRecoveryEnabled() {
+	uint8_t ctrl_1_value = readRegister(RV3129_CTRL_1);
+	#warning "function timerAutoReloadEnabled does not verify successful readRegister call"
+	
+	return (ctrl_1_value >> 4) & 1;
+}
+
+bool RV3129::setCountdownTimerSource(uint8_t srcTD) {
+	if (srcTD > 3) {
+		return false; // only 0b00 to 0b11 are valid settings
+	}
+
+	uint8_t ctrl_1_value = readRegister(RV3129_CTRL_1);
+	if (ctrl_1_value == 0xFF) {
+		return false; // error
+	}
+
+	uint8_t bit_pos = 5; // bit position for TD0
+
+	// clear bits, then set to parameter value
+	uint8_t new_ctrl_1_value = (ctrl_1_value & ~(0b11 << bit_pos)) | (srcTD << bit_pos);
+
+	return writeRegister(RV3129_CTRL_1, new_ctrl_1_value);
+}
+
+uint8_t RV3129::getCountdownTimerSource() {
+	uint8_t ctrl_1_value = readRegister(RV3129_CTRL_1);
+	if (ctrl_1_value == 0xFF) {
+		return 0xFF; // error
+	}
+
+	return (ctrl_1_value >> 5) & 0b11;
+}
+
+bool RV3129::setCLKOUTPinFunction(bool clkFoo) {
+	uint8_t ctrl_1_value = readRegister(RV3129_CTRL_1);
+	if (ctrl_1_value == 0xFF) {
+		return false; // error
+	}
+
+	uint8_t bit_pos = 7; // bit position for SR
+
+	// clear bit, then set to parameter value
+	uint8_t new_ctrl_1_value = (ctrl_1_value & ~(1 << bit_pos)) | (clkFoo << bit_pos);
+
+	return writeRegister(RV3129_CTRL_1, new_ctrl_1_value);
+}
+
+bool RV3129::getCLKOUTPinFunction() {
+	uint8_t ctrl_1_value = readRegister(RV3129_CTRL_1);
+	#warning "function timerAutoReloadEnabled does not verify successful readRegister call"
+	
+	return (ctrl_1_value >> 7) & 1;
+}
+
+uint8_t RV3129::getCTRL1Register() {
+	return readRegister(RV3129_CTRL_1);
+}
+
+bool RV3129::setCTRL1Register(uint8_t ctrl) {
+	return writeRegister(RV3129_CTRL_1, ctrl);
+}
+
+void RV3129::initMSG() {
+	uint8_t msg[8] = {0x49, 0x44, 0x45, 0x41, 0x53, 0x4c, 0x61, 0x62};
+	writeMultipleRegisters(RV3129_User_RAM, msg, 8);
 }
 
 uint8_t RV3129::BCDtoDEC(uint8_t val)
