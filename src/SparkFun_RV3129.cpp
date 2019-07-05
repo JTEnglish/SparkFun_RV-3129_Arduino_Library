@@ -570,7 +570,7 @@ bool RV3129::enableWatch1HzClkSrc(bool enableWE) {
 
 bool RV3129::watch1HzClkSrcEnabled() {
 	uint8_t ctrl_1_value = readRegister(RV3129_CTRL_1);
-	#warning "function timerAutoReloadEnabled does not verify successful readRegister call"
+	#warning "function watch1HzClkSrcEnabled does not verify successful readRegister call"
 	
 	return ctrl_1_value & 1;
 }
@@ -591,7 +591,7 @@ bool RV3129::enableAutomaticEEPROMRefresh(bool enableEERE) {
 
 bool RV3129::automaticEEPROMRefreshEnabled() {
 	uint8_t ctrl_1_value = readRegister(RV3129_CTRL_1);
-	#warning "function timerAutoReloadEnabled does not verify successful readRegister call"
+	#warning "function automaticEEPROMRefreshEnabled does not verify successful readRegister call"
 	
 	return (ctrl_1_value >> 3) & 1;
 }
@@ -612,7 +612,7 @@ bool RV3129::enableSelfRecovery(bool enableSR) {
 
 bool RV3129::selfRecoveryEnabled() {
 	uint8_t ctrl_1_value = readRegister(RV3129_CTRL_1);
-	#warning "function timerAutoReloadEnabled does not verify successful readRegister call"
+	#warning "function selfRecoveryEnabled does not verify successful readRegister call"
 	
 	return (ctrl_1_value >> 4) & 1;
 }
@@ -660,7 +660,7 @@ bool RV3129::setCLKOUTPinFunction(bool clkFoo) {
 
 bool RV3129::getCLKOUTPinFunction() {
 	uint8_t ctrl_1_value = readRegister(RV3129_CTRL_1);
-	#warning "function timerAutoReloadEnabled does not verify successful readRegister call"
+	#warning "function getCLKOUTPinFunction does not verify successful readRegister call"
 	
 	return (ctrl_1_value >> 7) & 1;
 }
@@ -671,6 +671,77 @@ uint8_t RV3129::getCTRL1Register() {
 
 bool RV3129::setCTRL1Register(uint8_t ctrl) {
 	return writeRegister(RV3129_CTRL_1, ctrl);
+}
+
+bool RV3129::enableSelfRecoveryINT(bool enableSRINT) {
+	uint8_t ctrlINT_value = readRegister(RV3129_CTRL_INT);
+	if (ctrlINT_value == 0xFF) {
+		return false; // error
+	}
+
+	uint8_t bit_pos = 4; // bit position for TIE
+
+	// clear bit, then set to parameter value
+	uint8_t new_ctrlINT_val = (ctrlINT_value & ~(1 << bit_pos)) | (enableSRINT << bit_pos);
+
+	return writeRegister(RV3129_CTRL_INT, new_ctrlINT_val);
+}
+
+bool RV3129::selfRecoveryINTEnabled() {
+	uint8_t ctrl_INT_value = readRegister(RV3129_CTRL_INT);
+	#warning "function selfRecoveryINTEnabled does not verify successful readRegister call"
+	
+	return (ctrl_INT_value >> 4) & 1;
+}
+
+bool RV3129::enableVLOW2INT(bool enableVLOW2) {
+	uint8_t ctrlINT_value = readRegister(RV3129_CTRL_INT);
+	if (ctrlINT_value == 0xFF) {
+		return false; // error
+	}
+
+	uint8_t bit_pos = 3; // bit position for TIE
+
+	// clear bit, then set to parameter value
+	uint8_t new_ctrlINT_val = (ctrlINT_value & ~(1 << bit_pos)) | (enableVLOW2 << bit_pos);
+
+	return writeRegister(RV3129_CTRL_INT, new_ctrlINT_val);
+}
+
+bool RV3129::VLOW2INTEnabled() {
+	uint8_t ctrl_INT_value = readRegister(RV3129_CTRL_INT);
+	#warning "function VLOW2INTEnabled does not verify successful readRegister call"
+	
+	return (ctrl_INT_value >> 3) & 1;
+}
+
+bool RV3129::enableVLOW1INT(bool enableVLOW1) {
+	uint8_t ctrlINT_value = readRegister(RV3129_CTRL_INT);
+	if (ctrlINT_value == 0xFF) {
+		return false; // error
+	}
+
+	uint8_t bit_pos = 2; // bit position for TIE
+
+	// clear bit, then set to parameter value
+	uint8_t new_ctrlINT_val = (ctrlINT_value & ~(1 << bit_pos)) | (enableVLOW1 << bit_pos);
+
+	return writeRegister(RV3129_CTRL_INT, new_ctrlINT_val);
+}
+
+bool RV3129::VLOW1INTEnabled() {
+	uint8_t ctrl_INT_value = readRegister(RV3129_CTRL_INT);
+	#warning "function VLOW1INTEnabled does not verify successful readRegister call"
+	
+	return (ctrl_INT_value >> 2) & 1;
+}
+
+uint8_t RV3129::getCTRLINTRegister() {
+	return readRegister(RV3129_CTRL_INT);
+}
+
+bool RV3129::setCTRLINTRegister(uint8_t ctrlINT) {
+	return writeRegister(RV3129_CTRL_INT, ctrlINT);
 }
 
 void RV3129::initMSG() {

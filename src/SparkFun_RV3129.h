@@ -284,6 +284,18 @@ class RV3129
 	uint8_t getCTRL1Register();
 	bool setCTRL1Register(uint8_t ctrl);
 
+	bool enableSelfRecoveryINT(bool enableSRINT);
+	bool selfRecoveryINTEnabled();
+
+	bool enableVLOW2INT(bool enableVLOW2);
+	bool VLOW2INTEnabled();
+
+	bool enableVLOW1INT(bool enableVLOW1);
+	bool VLOW1INTEnabled();
+
+	uint8_t getCTRLINTRegister();
+	bool setCTRLINTRegister(uint8_t ctrlINT);
+
  	// void enableSleep();
     // void setPowerSwitchFunction(uint8_t function);
     // void setPowerSwitchLock(bool lock);
