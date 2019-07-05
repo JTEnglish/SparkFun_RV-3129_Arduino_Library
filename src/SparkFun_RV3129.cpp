@@ -744,6 +744,35 @@ bool RV3129::setCTRLINTRegister(uint8_t ctrlINT) {
 	return writeRegister(RV3129_CTRL_INT, ctrlINT);
 }
 
+bool RV3129::getSelfRecoveryFlag() {
+	uint8_t INT_Flag_value = readRegister(RV3129_CTRL_INT_FLAG);
+	#warning "function getSelfRecoveryFlag does not verify successful readRegister call"
+	
+	return (INT_Flag_value >> 4) & 1;
+}
+
+bool RV3129::getVLOW2Flag() {
+	uint8_t INT_Flag_value = readRegister(RV3129_CTRL_INT_FLAG);
+	#warning "function getVLOW2Flag does not verify successful readRegister call"
+	
+	return (INT_Flag_value >> 3) & 1;
+}
+
+bool RV3129::getVLOW1Flag() {
+	uint8_t INT_Flag_value = readRegister(RV3129_CTRL_INT_FLAG);
+	#warning "function getVLOW1Flag does not verify successful readRegister call"
+	
+	return (INT_Flag_value >> 2) & 1;
+}
+
+uint8_t RV3129::getINTFlagRegister() {
+	return readRegister(RV3129_CTRL_INT_FLAG);
+}
+
+uint8_t RV3129::getCTRLStatusRegister() {
+	return readRegister(RV3129_CTRL_STATUS);
+}
+
 void RV3129::initMSG() {
 	uint8_t msg[8] = {0x49, 0x44, 0x45, 0x41, 0x53, 0x4c, 0x61, 0x62};
 	writeMultipleRegisters(RV3129_User_RAM, msg, 8);

@@ -152,6 +152,7 @@ Distributed as-is; no warranty is given.
 #define RV3129_CTRL_1					0x00
 #define RV3129_CTRL_INT					0x01
 #define RV3129_CTRL_INT_FLAG			0x02
+#define RV3129_CTRL_STATUS				0x03
 #define RV3129_CTRL_RESET				0x04
 
 // Clock Page
@@ -295,6 +296,14 @@ class RV3129
 
 	uint8_t getCTRLINTRegister();
 	bool setCTRLINTRegister(uint8_t ctrlINT);
+
+	bool getSelfRecoveryFlag();
+	bool getVLOW2Flag();
+	bool getVLOW1Flag();
+
+	uint8_t getINTFlagRegister();
+
+	uint8_t getCTRLStatusRegister();
 
  	// void enableSleep();
     // void setPowerSwitchFunction(uint8_t function);
