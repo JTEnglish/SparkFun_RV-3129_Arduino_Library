@@ -16,12 +16,11 @@
     Open the serial monitor at 9600 baud
 */
 
-#include <SparkFun_RV1805.h>
+#include <RV3129.h>
 
 RV1805 rtc;
 
 //The below variables control what the date will be set to
-int hund = 50;
 int sec = 2;
 int minute = 18;
 int hour = 7;
@@ -48,7 +47,7 @@ void setup() {
   }
   
   //Uncomment the below code to set the RTC to your own time
-  /*if (rtc.setTime(hund, sec, minute, hour, date, month, year, day) == false) {
+  /*if (rtc.setTime(sec, minute, hour, date, month, year, day) == false) {
     Serial.println("Something went wrong setting the time");
   }*/
   

@@ -1,4 +1,5 @@
 /******************************************************************************
+<Original .cpp Comments>
 SparkFun_RV1805.h
 RV1805 Arduino Library
 Andy England @ SparkFun Electronics
@@ -14,7 +15,7 @@ or concerns with licensing, please contact techsupport@sparkfun.com.
 Distributed as-is; no warranty is given.
 ******************************************************************************/
 
-#include "SparkFun_RV3129.h"
+#include "RV3129.h"
 
 //****************************************************************************//
 //

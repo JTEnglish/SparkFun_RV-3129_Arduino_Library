@@ -16,11 +16,10 @@
     Open the serial monitor at 9600 baud
 */
 
-#include <SparkFun_RV1805.h>
+#include <RV3129.h>
 
 RV1805 rtc;
 
-int hund = 50;
 int sec = 2;
 int minute = 18;
 int hour = 7;

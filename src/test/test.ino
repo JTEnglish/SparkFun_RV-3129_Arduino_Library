@@ -2,7 +2,7 @@
   Test Arduino sketch for RV3129 RTC module.
 */
 
-#include "SparkFun_RV3129.h"
+#include "RV3129.h"
 
 RV3129 rtc;
 
