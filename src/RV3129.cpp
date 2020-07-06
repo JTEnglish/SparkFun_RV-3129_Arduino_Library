@@ -131,6 +131,8 @@ void RV3129::set24Hour()
 	{		
 		//Not sure what changing the CTRL1 register will do to hour register so let's get a copy
 		uint8_t hour = readRegister(RV3129_HOURS); //Get the current 12 hour formatted time in BCD
+		//Change to 24 hour mode
+		hour &= ~(1<<HOURS_12_24);  //This has to happen before conversion from 1-12 hour range to 0-23 range
 		boolean pm = false;
 		if(hour & (1<<HOURS_AM_PM)) //Is the AM/PM bit set?
 		{
@@ -146,8 +148,6 @@ void RV3129::set24Hour()
 		if(hour == 24) hour = 12; //12PM becomes 24, but should really be 12
 
 		hour = DECtoBCD(hour); //Convert to BCD
-		//Change to 24 hour mode
-		hour &= ~(1<<HOURS_12_24);
 
 		writeRegister(RV3129_HOURS, hour); //Record this to hours register
 	}
